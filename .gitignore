@@ -8,3 +8,4 @@ error.log
 *.csv
 
 docs/_build/
+*.cfg
