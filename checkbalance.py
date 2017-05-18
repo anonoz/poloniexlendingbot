@@ -20,8 +20,12 @@ Config.init(config_location)
 api = Poloniex(Config.get('API', 'apikey', None), Config.get('API', 'secret', None))
 active_loans = api.return_active_loans()
 active_loans_sum = pd.DataFrame.from_records(active_loans['provided']).query('currency == "BTC"')['amount'].map(lambda x: x.replace('.','')).astype('int').sum()
-idle_loan_balance = api.return_available_account_balances("lending")["lending"]["BTC"]
-idle_loan_balance = int(idle_loan_balance.replace('.', ''))
+idle_loan_balance = api.return_available_account_balances("lending")["lending"]
+# idle_loan_balance = int(idle_loan_balance.replace('.', ''))
+if idle_loan_balance == []:
+    idle_loan_balance = 0
+else:
+    idle_loan_balance = int(idle_loan_balance["BTC"].replace('.', ''))
 
 print("Idle: {0}".format(idle_loan_balance))
 print("Active: {0}".format(active_loans_sum))
